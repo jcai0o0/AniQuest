@@ -1,3 +1,4 @@
+# Ignore .env file
 .env
 
 # Python-generated files
@@ -10,3 +11,11 @@ wheels/
 
 # Virtual environments
 .venv
+venv/
+
+# Ignore IDE-specific files
+.vscode/
+.idea/
+
+# Ignore OS-specific files
+.DS_Store
