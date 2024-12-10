@@ -18,6 +18,6 @@
    ```
 6. Run application
    ```shell
-   $ uv run app.pyu
+   $ uv run app.py
    ```
 
