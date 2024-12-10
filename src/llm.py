@@ -4,6 +4,7 @@ from chromadb.config import Settings
 from dotenv import load_dotenv
 from huggingface_hub import InferenceClient
 from sentence_transformers import SentenceTransformer
+from pathlib import Path
 
 SYSTEM_PROMPT = """You are an expert in all kinds of anime. 
 You provide personalized recommendations based on what the user has already watched and enjoyed. 
@@ -34,16 +35,24 @@ def load_cred() -> None:
 
 
 def chroma_db():
-    client = chromadb.Client(Settings(persist_directory="data/", is_persistent=True))
+    client = chromadb.Client(
+        Settings(
+            persist_directory=str(Path(Path(__file__).parent, "data/")),
+            is_persistent=True,
+            anonymized_telemetry=False,
+        )
+    )
     anime_collection = client.create_collection(name="anime_recommendations")
 
-    anime_data = pd.read_csv("data/anime-dataset-2023.csv")
+    anime_data = pd.read_csv(
+        Path(Path(__file__).parent, "data/", "anime-dataset-2023.csv")
+    )
     anime_data = anime_data[
         (~anime_data.Synopsis.str.startswith("No description available"))
         & (~anime_data.Type.isin(["Music"]))
     ].dropna()[["Name", "Synopsis"]]
 
-    anime_data = anime_data.iloc[:1000]
+    anime_data = anime_data.iloc[:100]
 
     # Load a pre-trained embedding model
     embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
@@ -81,25 +90,38 @@ def generate_response(model: str, message: str) -> str:
 
     return completion.choices[0].message
 
-def query_chroma():
-    client = chromadb.Client(Settings(persist_directory="data/", is_persistent=True))
+
+def query_chroma(query: str, anime_count: int) -> str:
+    client = chromadb.Client(
+        Settings(
+            persist_directory=str(Path(Path(__file__).parent, "data/")),
+            is_persistent=True,
+        )
+    )
     anime_collection = client.get_collection(name="anime_recommendations")
 
     embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
 
     # Generate a sample query embedding
-    query_embedding = embedding_model.encode("I love action-packed anime with deep storylines, espically Hunter × Hunter.")
+    query_embedding = embedding_model.encode(query)
 
     # Search the database
     results = anime_collection.query(
         query_embeddings=[query_embedding],
-        n_results=5,  # Number of recommendations to return
-        include=["metadatas"]
+        n_results=anime_count,  # Number of recommendations to return
+        include=["metadatas"],
     )
 
+    res = ""
     # Print recommendations
-    for metadata in results['metadatas'][0]:
-        print(f"Name: {metadata['Name']}, Synopsis: {metadata['Synopsis']}")
+    for metadata in results["metadatas"][0]:
+        tmp = f"Name: {metadata['Name']}, Synopsis: {metadata['Synopsis']}"
+        print(tmp)
+        res += tmp
+
+    return res
+
 
 if __name__ == "__main__":
+    # chroma_db()
     query_chroma()

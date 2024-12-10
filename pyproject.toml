@@ -6,8 +6,9 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "chromadb>=0.5.23",
+    "gradio>=5.8.0",
     "huggingface-hub>=0.26.5",
-    "numpy<2.0.0",
+    "numpy==1.26.4",
     "pandas>=2.2.3",
     "python-dotenv>=1.0.1",
     "ruff>=0.8.2",
@@ -22,3 +23,8 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src"]
+
+[dependency-groups]
+dev = [
+    "setuptools>=75.6.0",
+]

@@ -8,6 +8,16 @@
     ```shell
     $ uv sync
     ```
-4. 
-
+4. Add dependencies
+   ```shell
+   $ uv add "[package]"
+   ```
+5. Remove dependencies
+   ```shell
+   $ uv remove "[package]"
+   ```
+6. Run application
+   ```shell
+   $ uv run app.pyu
+   ```
 
