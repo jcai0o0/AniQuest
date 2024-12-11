@@ -21,3 +21,7 @@ venv/
 .DS_Store
 
 .gradio
+
+# Ignore large dataset
+src/data/warm_rerank_data.csv
+src/data/AnimeList.csv
