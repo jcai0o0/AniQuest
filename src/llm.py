@@ -112,12 +112,11 @@ def query_chroma(query: str, anime_count: int) -> str:
         include=["metadatas"],
     )
 
-    res = ""
+    res = []
     # Print recommendations
     for metadata in results["metadatas"][0]:
-        tmp = f"Name: {metadata['Name']}, Synopsis: {metadata['Synopsis']}"
-        print(tmp)
-        res += tmp
+        # print(f"Name: {metadata['Name']}, Synopsis: {metadata['Synopsis']}")
+        res.append(metadata['Name'])
 
     return res
 
