@@ -43,7 +43,7 @@ def chroma_db():
         )
     )
     anime_collection = client.create_collection(name="anime_recommendations")
-
+    # TODO: create vector store using final_anime_list.csv
     anime_data = pd.read_csv(
         Path(Path(__file__).parent, "data/", "anime-dataset-2023.csv")
     )
