@@ -45,14 +45,13 @@ def chroma_db():
     anime_collection = client.create_collection(name="anime_recommendations")
     # TODO: create vector store using final_anime_list.csv
     anime_data = pd.read_csv(
-        Path(Path(__file__).parent, "data/", "anime-dataset-2023.csv")
+        Path(Path(__file__).parent, "data/", "final_anime_list_cleaned_2nd.csv")
     )
     anime_data = anime_data[
         (~anime_data.Synopsis.str.startswith("No description available"))
-        & (~anime_data.Type.isin(["Music"]))
-    ].dropna()[["Name", "Synopsis"]]
+    ].dropna()[["title", "Synopsis"]]
 
-    anime_data = anime_data.iloc[:100]
+    # anime_data = anime_data.iloc[:100]
 
     # Load a pre-trained embedding model
     embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
@@ -64,7 +63,7 @@ def chroma_db():
     anime_collection.add(
         ids=[str(i) for i in anime_data.index],  # Unique IDs for each anime
         embeddings=embeddings,  # List of vector embeddings
-        metadatas=anime_data[["Name", "Synopsis"]].to_dict(
+        metadatas=anime_data[["title", "Synopsis"]].to_dict(
             orient="records"
         ),  # Metadata as dictionaries
     )
@@ -91,7 +90,7 @@ def generate_response(model: str, message: str) -> str:
     return completion.choices[0].message
 
 
-def query_chroma(query: str, anime_count: int) -> str:
+def query_chroma(query: str, anime_count: int) -> list[str]:
     client = chromadb.Client(
         Settings(
             persist_directory=str(Path(Path(__file__).parent, "data/")),
@@ -116,11 +115,12 @@ def query_chroma(query: str, anime_count: int) -> str:
     # Print recommendations
     for metadata in results["metadatas"][0]:
         # print(f"Name: {metadata['Name']}, Synopsis: {metadata['Synopsis']}")
-        res.append(metadata['Name'])
+        res.append(metadata['title'])
 
     return res
 
 
 if __name__ == "__main__":
     # chroma_db()
-    query_chroma()
+    print(query_chroma(query="I want something like Demon Slayer, but with more romance and produced by Kyoto Animation",
+                 anime_count=100))
