@@ -5,7 +5,43 @@ import pandas as pd
 from pathlib import Path
 import requests
 
-def download_pic(names: list[str]) -> list[str]:
+css = """
+footer {display: none !important}
+.gradio-container {
+    max-width: 1200px;
+    margin: auto;
+}
+.contain {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 20px;
+}
+.submit-btn {
+    background: linear-gradient(90deg, #4B79A1 0%, #283E51 100%) !important;
+    border: none !important;
+    color: white !important;
+}
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+.title {
+    text-align: center;
+    font-size: 2.5em;
+    font-weight: bold;
+    margin-bottom: 1em;
+    background: linear-gradient(90deg, #4B79A1 0%, #283E51 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.output-image {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+"""
+
+
+def download_pic(names: list[str]):
     df = pd.read_csv(str(Path(Path(__file__).parent, "data/final_anime_list.csv")))
     pic_dir = Path(Path(__file__).parent, "data/pics")
 
@@ -13,8 +49,8 @@ def download_pic(names: list[str]) -> list[str]:
         pic_dir.mkdir(exist_ok=True)
 
     df = df[df.Name.isin(names)]
-    df = df[["Name", "Image URL"]].set_index("Name").reindex(names)
-
+    df = df[["Name", "Image URL", "Synopsis"]].set_index("Name").reindex(names)
+    synopsis_list = df['Synopsis'].tolist()
     file_paths = []
     for url in df["Image URL"]:
         file_name = "_".join(url.split("/")[-2:])
@@ -32,31 +68,134 @@ def download_pic(names: list[str]) -> list[str]:
         file_paths.append(str(file_path))
 
         print(f"Image downloaded successfully: {url}")
-    return file_paths
+    return file_paths, synopsis_list
     # return url
 
 
-def integration_test(query: str, anime_count: int):
-    # anime_name_list = query_chroma(query=query, anime_count=anime_count)
+def integration_test(query: str):
+    anime_name_list = query_chroma(query=query, anime_count=100)
 
     # you need to have the following datasets in src/data/ to call this function
     # 1. warm_rerank_data.csv
     # 2. user_similarities.csv
     # we saved the intermediate matrix for calculation efficiency
-    # anime_name_list = rank_anime_warm(userid=12, anime_list=anime_name_list)
+    anime_name_list = rank_anime_warm(userid=12, anime_list=anime_name_list)[:4]
+    final_names = [x[0] for x in anime_name_list]
 
-    df = pd.read_csv("/Users/janet/PycharmProjects/AniQuest/src/data/final_anime_list.csv")
-    import numpy as np
-    anime_name_list = np.random.choice(df.Name.values, anime_count)
-    anime_pic_list = download_pic(list(anime_name_list))
+    anime_pic_list, synopsis_list = download_pic(list(final_names))
 
-    return anime_name_list, anime_pic_list
+    return [*anime_name_list, *anime_pic_list, *synopsis_list]
+#
+# demo = gr.Interface(
+#     fn=integration_test,
+#     inputs=["text", "slider"],
+#     outputs=[gr.Text(label="Anime Name"), gr.Gallery(label="Pictures")],
+# )
 
-demo = gr.Interface(
-    fn=integration_test,
-    inputs=["text", "slider"],
-    outputs=[gr.Text(label="Anime Name"), gr.Gallery(label="Pictures")],
-)
+
+def clear_prompt():
+    """Function to clear the prompt box."""
+    return ""
+
+
+def feedback_button(action, anime_name):
+    # Store or log feedback (can be expanded to save in a database)
+    return f"You {action}d {anime_name}!"
+
+
+with gr.Blocks(theme=gr.themes.Soft(), css=css) as demo:
+    gr.HTML('<div class="title">AniQuest</div>')
+    gr.HTML(
+        '<div style="text-align: center; margin-bottom: 2em; color: #666;">Recommendate animes based on your description</div>')
+
+    with gr.Column():
+        prompt = gr.Textbox(
+            label="Query",
+            placeholder="Describe the anime you want to watch next ...",
+            lines=1
+        )
+        with gr.Row():
+            generate_btn = gr.Button(
+                "🙆 Submit",
+                elem_classes=["submit-btn"]
+            )
+            clear_btn = gr.Button(
+                "🙅 Clear",
+                elem_classes=["submit-btn"]
+            )
+    with gr.Row():  # Row to contain two anime pairs (pair 1 and pair 2)
+        for i in range(4):
+
+            anime_names = []  # Store references to the anime name components
+            feedback_texts = []  # List to store feedback components
+
+            with gr.Column(scale=1, elem_classes=["anime-block"]):
+                exec(f"anime{i + 1} = gr.Textbox(label='Anime {i + 1}')")
+                exec(f"image{i + 1} = gr.Image(label='Image', elem_classes=['output-image', 'fixed-width'])")
+                exec(
+                    f"description{i + 1} = gr.HTML('<div class=\"anime-description\" style=\"margin-top: 10px; font-size: 14px; color: #666;\">Description for anime {i + 1}</div>')")
+
+                # anime_names.append(anime_name)  # Store the reference to use in the button's click method
+
+                # with gr.Row():  # Add Like and Dislike buttons under each anime name
+                #     like_btn = gr.Button("👍 Like")
+                #     dislike_btn = gr.Button("👎 Dislike")
+                # feedback_text = gr.Textbox(
+                #     label="Feedback",
+                #     interactive=False,
+                #     visible=False  # Hidden initially; becomes visible after feedback
+                # )
+                # feedback_texts.append(feedback_text)
+
+                # Link Like and Dislike buttons to feedback function
+                # like_btn.click(fn=feedback_button, inputs=["Like", anime_name], outputs=feedback_text)
+                # dislike_btn.click(fn=feedback_button, inputs=["Dislike", anime_name], outputs=feedback_text)
+
+    generate_btn.click(
+        fn=integration_test,
+        inputs=[prompt],
+        outputs=[anime1, anime2, anime3, anime4, image1, image2, image3, image4, description1, description2, description3, description4, ]
+    )
+    # Link the "Clear" button to the clear function to clear the prompt
+    clear_btn.click(
+        fn=clear_prompt,  # The function to call
+        inputs=[],  # No input required
+        outputs=[prompt]  # Clears the prompt
+    )
+
+    #     with gr.Column(scale=1, elem_classes=["fixed-width"]):
+    #         anime1 = gr.Textbox(label="Anime 1")
+    #         output1 = gr.Image(
+    #             label="Image",
+    #             elem_id="output-image",
+    #             elem_classes=["output-image", "fixed-width"]
+    #         )
+    #
+    #     with gr.Column(scale=1, elem_classes=["fixed-width"]):
+    #         anime2 = gr.Textbox(label="Anime 2")
+    #         output2 = gr.Image(
+    #             label="Image",
+    #             elem_id="output-image",
+    #             elem_classes=["output-image", "fixed-width"]
+    #         )
+    #
+    # with gr.Row():  # Another row for the next two anime pairs (pair 3 and pair 4)
+    #     with gr.Column(scale=1, elem_classes=["fixed-width"]):
+    #         anime3 = gr.Textbox(label="Anime 3")
+    #         output3 = gr.Image(
+    #             label="Image",
+    #             elem_id="output-image",
+    #             elem_classes=["output-image", "fixed-width"]
+    #         )
+    #
+    #     with gr.Column(scale=1, elem_classes=["fixed-width"]):
+    #         anime4 = gr.Textbox(label="Anime 4")
+    #         output4 = gr.Image(
+    #             label="Image",
+    #             elem_id="output-image",
+    #             elem_classes=["output-image", "fixed-width"]
+    #         )
+
 
 if __name__ == "__main__":
     demo.launch(server_name="0.0.0.0")
