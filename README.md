@@ -3,9 +3,9 @@ This guide will help you set up the environment and run the application.
 
 Ensure you have the following installed:
 
-     * Python 3.8+
-     * uv package manager
-       If not installed, follow the installation guide at [UV Package Manager Docs](https://github.com/astral-sh/uv).
+- Python 3.8+
+- uv package manager
+   If not installed, follow the installation guide at [UV Package Manager Docs](https://github.com/astral-sh/uv).
 
 **Setup Instructions**
 **Create a Virtual Environment**
@@ -43,5 +43,5 @@ Demo Video
 Watch the demonstration of the project to understand its workflow and functionality:
 ![Demo Video](img/AniQuest-demo-video.mov) 
 
-Alternatively, you can find the demo video in the demo /img folder
+If the video does not play inline, you can download it directly [here](img/AniQuest-demo-video.mov).
 
