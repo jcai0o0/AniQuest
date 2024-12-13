@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AniQuest</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Page Title -->
+    <div class="title">AniQuest</div>
+
+    <!-- Subtitle -->
+    <div class="subtitle">
+        We recommend animes based on your description
+    </div>
+
+    <!-- Welcome message -->
+    <div class="welcome-message">
+        ⚠️ Welcome, [user_id: 12] to this recommendation system ⚠️
+    </div>
+
+    <!-- Query Input -->
+    <div class="input-container">
+        <label for="query">Query</label>
+        <input type="text" id="query" placeholder="Describe the anime you want to watch next ...">
+    </div>
+
+    <!-- Buttons -->
+    <div class="button-container">
+        <button id="submit-btn" class="submit-btn">🙆 Submit</button>
+        <button id="clear-btn" class="submit-btn">🙅 Clear</button>
+    </div>
+
+    <!-- Anime Recommendations -->
+    <div class="anime-container">
+        <div class="anime-block" id="anime1"></div>
+        <div class="anime-block" id="anime2"></div>
+        <div class="anime-block" id="anime3"></div>
+        <div class="anime-block" id="anime4"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

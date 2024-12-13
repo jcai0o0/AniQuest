@@ -1,0 +1,85 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.title {
+    text-align: center;
+    font-size: 2.5em;
+    font-weight: bold;
+    margin-top: 20px;
+    background: linear-gradient(90deg, #4B79A1 0%, #283E51 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+    text-align: center;
+    font-size: 1.2em;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.welcome-message {
+    color: red;
+    text-align: center;
+    padding: 10px;
+    background: rgba(255,0,0,0.1);
+    border-radius: 8px;
+}
+
+.input-container {
+    text-align: center;
+    margin: 20px;
+}
+
+input[type="text"] {
+    width: 80%;
+    padding: 10px;
+    font-size: 1.1em;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.button-container {
+    text-align: center;
+    margin: 20px;
+}
+
+.submit-btn {
+    background: linear-gradient(90deg, #4B79A1 0%, #283E51 100%);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.anime-container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.anime-block {
+    width: 22%;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.anime-block img {
+    width: 100%;
+    border-radius: 8px;
+}
