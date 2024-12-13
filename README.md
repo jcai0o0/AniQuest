@@ -41,7 +41,7 @@ Download Dataset Here
 
 Demo Video
 Watch the demonstration of the project to understand its workflow and functionality:
-![Demo Video](img/AniQuest-demo-video.mov)
+![Demo Video](img/AniQuest-demo-video.mov) 
 
 Alternatively, you can find the demo video in the demo /img folder
 
