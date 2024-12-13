@@ -36,13 +36,26 @@ Start the application by running:
 **Location:** The dataset required for this project is located in the data/ directory.
 Format: Ensure that all dataset files (e.g., final_anime_list.csv) are properly placed in this folder before running the application.
 
-**Downloading Instructions:** some of the datasets are too large to include directly in the repository, so we filter out and used smaller versions, therefore we provide a link for download:
+**Downloading Instructions:** 
 
-[Anime Dataset 2023](https://www.kaggle.com/datasets/dbdmobile/myanimelist-dataset)
-[MyAnimeList Dataset](https://www.kaggle.com/datasets/azathoth42/myanimelist)
+Some datasets are too large to include directly in the repository, so we filter out and use smaller versions. You can download the required datasets using the links below:
+
+- [Anime Dataset 2023](https://www.kaggle.com/datasets/dbdmobile/myanimelist-dataset)
+- [MyAnimeList Dataset](https://www.kaggle.com/datasets/azathoth42/myanimelist)
+
+## Screenshots
+
+Here are some screenshots of the application:
+
+![Handling a new user](img/AniQues-screenshot-new_user.png)
+*Main Dashboard Screen for a New User*
+
+![Handling an existing user](img/AniQues-screenshot-user_12.png)
+*Main Dashboard Screen for an Existing User*
 
 ## Demo Video
 Watch the demonstration of the project to understand its workflow and functionality:
+
 ![Demo Video](img/AniQuest-demo-video.mov) 
 
 If the video does not play inline, you can download it directly [here](img/AniQuest-demo-video.mov).
