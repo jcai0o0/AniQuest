@@ -57,7 +57,7 @@ Here are some screenshots of the application:
 Watch the demonstration of the project to understand its workflow and functionality:
 
 <video width="640" height="360" controls>
-  <source src="img/AniQuest-demo-video.mov" type="video/mp4">
+  <source src="img/AniQuest-demo-video.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video>
 
