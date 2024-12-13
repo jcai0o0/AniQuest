@@ -72,7 +72,7 @@ def download_pic(names: list[str]):
     # return url
 
 
-def integration_test(query: str):
+def integration_warm(query: str):
     anime_name_list = query_chroma(query=query, anime_count=100)
 
     # you need to have the following datasets in src/data/ to call this function
@@ -85,12 +85,8 @@ def integration_test(query: str):
     anime_pic_list, synopsis_list = download_pic(list(final_names))
 
     return [*anime_name_list, *anime_pic_list, *synopsis_list]
-#
-# demo = gr.Interface(
-#     fn=integration_test,
-#     inputs=["text", "slider"],
-#     outputs=[gr.Text(label="Anime Name"), gr.Gallery(label="Pictures")],
-# )
+
+
 
 
 def clear_prompt():
@@ -106,7 +102,12 @@ def feedback_button(action, anime_name):
 with gr.Blocks(theme=gr.themes.Soft(), css=css) as demo:
     gr.HTML('<div class="title">AniQuest</div>')
     gr.HTML(
-        '<div style="text-align: center; margin-bottom: 2em; color: #666;">Recommendate animes based on your description</div>')
+        '<div style="text-align: center; margin-bottom: 2em; color: #666; font-size: 24px;">We recommendate animes based on your description</div>')
+    gr.HTML("""
+                <div style="color: red; margin-bottom: 1em; text-align: center; padding: 10px; background: rgba(255,0,0,0.1); border-radius: 8px;">
+                    ⚠️ Welcome, [user_id: 12] to this recommendation system ⚠️
+                </div>
+            """)
 
     with gr.Column():
         prompt = gr.Textbox(
@@ -123,23 +124,26 @@ with gr.Blocks(theme=gr.themes.Soft(), css=css) as demo:
                 "🙅 Clear",
                 elem_classes=["submit-btn"]
             )
-    with gr.Row():  # Row to contain two anime pairs (pair 1 and pair 2)
+    with gr.Row():
         for i in range(4):
 
             anime_names = []  # Store references to the anime name components
             feedback_texts = []  # List to store feedback components
 
             with gr.Column(scale=1, elem_classes=["anime-block"]):
+
                 exec(f"anime{i + 1} = gr.Textbox(label='Anime {i + 1}')")
+
+                with gr.Row():  # Add Like and Dislike buttons under each anime name
+                    like_btn = gr.Button("👍 Like")
+                    dislike_btn = gr.Button("👎 Dislike")
+
                 exec(f"image{i + 1} = gr.Image(label='Image', elem_classes=['output-image', 'fixed-width'])")
                 exec(
                     f"description{i + 1} = gr.HTML('<div class=\"anime-description\" style=\"margin-top: 10px; font-size: 14px; color: #666;\">Description for anime {i + 1}</div>')")
 
                 # anime_names.append(anime_name)  # Store the reference to use in the button's click method
 
-                # with gr.Row():  # Add Like and Dislike buttons under each anime name
-                #     like_btn = gr.Button("👍 Like")
-                #     dislike_btn = gr.Button("👎 Dislike")
                 # feedback_text = gr.Textbox(
                 #     label="Feedback",
                 #     interactive=False,
@@ -152,7 +156,7 @@ with gr.Blocks(theme=gr.themes.Soft(), css=css) as demo:
                 # dislike_btn.click(fn=feedback_button, inputs=["Dislike", anime_name], outputs=feedback_text)
 
     generate_btn.click(
-        fn=integration_test,
+        fn=integration_warm,
         inputs=[prompt],
         outputs=[anime1, anime2, anime3, anime4, image1, image2, image3, image4, description1, description2, description3, description4, ]
     )
@@ -163,39 +167,10 @@ with gr.Blocks(theme=gr.themes.Soft(), css=css) as demo:
         outputs=[prompt]  # Clears the prompt
     )
 
-    #     with gr.Column(scale=1, elem_classes=["fixed-width"]):
-    #         anime1 = gr.Textbox(label="Anime 1")
-    #         output1 = gr.Image(
-    #             label="Image",
-    #             elem_id="output-image",
-    #             elem_classes=["output-image", "fixed-width"]
-    #         )
-    #
-    #     with gr.Column(scale=1, elem_classes=["fixed-width"]):
-    #         anime2 = gr.Textbox(label="Anime 2")
-    #         output2 = gr.Image(
-    #             label="Image",
-    #             elem_id="output-image",
-    #             elem_classes=["output-image", "fixed-width"]
-    #         )
-    #
-    # with gr.Row():  # Another row for the next two anime pairs (pair 3 and pair 4)
-    #     with gr.Column(scale=1, elem_classes=["fixed-width"]):
-    #         anime3 = gr.Textbox(label="Anime 3")
-    #         output3 = gr.Image(
-    #             label="Image",
-    #             elem_id="output-image",
-    #             elem_classes=["output-image", "fixed-width"]
-    #         )
-    #
-    #     with gr.Column(scale=1, elem_classes=["fixed-width"]):
-    #         anime4 = gr.Textbox(label="Anime 4")
-    #         output4 = gr.Image(
-    #             label="Image",
-    #             elem_id="output-image",
-    #             elem_classes=["output-image", "fixed-width"]
-    #         )
+
 
 
 if __name__ == "__main__":
-    demo.launch(server_name="0.0.0.0")
+    # integration_warm(query='I want something like Demon Slayer, but with more romance and produced by Kyoto Animation')
+    # warm user
+    demo.launch(server_name="0.0.0.0", server_port=7860)

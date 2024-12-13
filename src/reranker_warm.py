@@ -68,7 +68,7 @@ def rank_anime_warm(userid, anime_list):
     anime_list = ['Naruto', 'One Piece', 'Dragon Ball']
     data: matrix
     """
-    data = pd.read_csv(Path(Path(__file__).parent, "data/", "warm_rerank_data.csv"))
+    data = pd.read_csv(Path(Path(__file__).parent, "data/", "warm_rerank_data_smaller.csv"))
     data['genre_embedding'] = data['genre_embedding'].apply(convert_embedding)
     # Step 3: load User-item similarity matrix
     user_similarities = pd.read_csv(Path(Path(__file__).parent, "data/", "user_similarities.csv"))
@@ -124,3 +124,36 @@ def rank_anime_warm(userid, anime_list):
     # Sort by final score
     ranked_animes = sorted(anime_ranking, key=lambda x: x[1], reverse=True)
     return ranked_animes
+
+
+def data_preprocess_smaller_set():
+    df_anime = pd.read_csv(Path(Path(__file__).parent, "data/", "final_anime_list.csv"))
+    df_user = pd.read_csv(Path(Path(__file__).parent, "data/", "UserList.csv"))
+    df_interaction = pd.read_csv(Path(Path(__file__).parent, "data/", "user_anime_list.csv"))
+
+    data = df_interaction.merge(df_user, on='username', how='left')
+    data = data.merge(df_anime, on='anime_id', how='left')
+
+    # Encode users and anime
+    user_ids = data["user_id"].astype("category").cat.codes
+    anime_ids = data["anime_id"].astype("category").cat.codes
+
+    # Add encoded IDs to the dataset
+    data["user_id_encoded"] = user_ids
+    data["anime_id_encoded"] = anime_ids
+
+    data = data[data["user_id_encoded"] == 12]
+
+    data['genre'] = data['genre'].apply(lambda x: str(x) if not isinstance(x, str) else x)
+    data = data[~data['genre'].apply(lambda x: isinstance(x, float) or pd.isna(x))]
+
+    model = SentenceTransformer('all-MiniLM-L6-v2')
+    data['genre_embedding'] = data['genre'].apply(lambda x: model.encode(x) if isinstance(x, str) else np.zeros(384))
+
+    print(data.shape)
+    data.to_csv(Path(Path(__file__).parent, "data/", "warm_rerank_data_smaller.csv"), index=False)
+
+    return data
+
+if __name__ == '__main__':
+    data_preprocess_smaller_set()
