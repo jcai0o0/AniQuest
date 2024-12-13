@@ -2,12 +2,11 @@
 This guide will help you set up the environment and run the application.
 
 Ensure you have the following installed:
-
 - Python 3.8+
 - uv package manager
    If not installed, follow the installation guide at [UV Package Manager Docs](https://github.com/astral-sh/uv).
 
-**Setup Instructions**
+## Setup Instructions
 **Create a Virtual Environment**
 Create an isolated environment for the project. Run the following command:
 
@@ -27,19 +26,19 @@ Create an isolated environment for the project. Run the following command:
    ```shell
    $ uv remove "[package]"
    ```
-**Running the Application**
+## Running the Application
 Start the application by running:
    ```shell
    $ uv run app.py
    ```
-**Dataset**
+## Dataset
 **Location:** The dataset required for this project is located in the data/ directory.
 Format: Ensure that all dataset files (e.g., final_anime_list.csv) are properly placed in this folder before running the application.
 
 Downloading Instructions: If the dataset is too large to include directly in the repository, provide a link for download:
 Download Dataset Here
 
-Demo Video
+## Demo Video
 Watch the demonstration of the project to understand its workflow and functionality:
 ![Demo Video](img/AniQuest-demo-video.mov) 
 
