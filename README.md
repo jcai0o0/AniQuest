@@ -56,5 +56,6 @@ Here are some screenshots of the application:
 ## Demo Video
 Watch the demonstration of the project to understand its workflow and functionality:
 ![Demo Video](img/AniQuest-demo-video.mp4)
+<video src="https://github.com/jcai0o0/AniQuest/blob/main/img/AniQuest-demo-video.mp4" width="300" />
 If the video does not play inline, you can download it directly [here](img/AniQuest-demo-video.mov).
 
