@@ -8,6 +8,7 @@ Ensure you have the following installed:
 
 ## Setup Instructions
 **Create a Virtual Environment**
+
 Create an isolated environment for the project. Run the following command:
 
 1. Create virtual environment
@@ -35,8 +36,10 @@ Start the application by running:
 **Location:** The dataset required for this project is located in the data/ directory.
 Format: Ensure that all dataset files (e.g., final_anime_list.csv) are properly placed in this folder before running the application.
 
-Downloading Instructions: If the dataset is too large to include directly in the repository, provide a link for download:
-Download Dataset Here
+**Downloading Instructions:** some of the datasets are too large to include directly in the repository, so we filter out and used smaller versions, therefore we provide a link for download:
+
+[Anime Dataset 2023](https://www.kaggle.com/datasets/dbdmobile/myanimelist-dataset)
+[MyAnimeList Dataset](https://www.kaggle.com/datasets/azathoth42/myanimelist)
 
 ## Demo Video
 Watch the demonstration of the project to understand its workflow and functionality:
