@@ -48,15 +48,18 @@ Some datasets are too large to include directly in the repository, so we filter 
 Here are some screenshots of the application:
 
 ![Handling a new user](img/AniQues-screenshot-new_user.png)
-*Main Dashboard Screen for a New User*
+**Main Dashboard Screen for a New User**
 
 ![Handling an existing user](img/AniQues-screenshot-user_12.png)
-*Main Dashboard Screen for an Existing User*
+**Main Dashboard Screen for an Existing User**
 
 ## Demo Video
 Watch the demonstration of the project to understand its workflow and functionality:
 
-![Demo Video](img/AniQuest-demo-video.mov) 
+<video width="640" height="360" controls>
+  <source src="img/AniQuest-demo-video.mov" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
 
 If the video does not play inline, you can download it directly [here](img/AniQuest-demo-video.mov).
 
