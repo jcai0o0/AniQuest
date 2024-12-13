@@ -42,8 +42,8 @@ footer {display: none !important}
 
 
 def download_pic(names: list[str]):
-    df = pd.read_csv(str(Path(Path(__file__).parent, "data/final_anime_list.csv")))
-    pic_dir = Path(Path(__file__).parent, "data/pics")
+    df = pd.read_csv(str(Path(Path(__file__).parent, "src/data/final_anime_list.csv")))
+    pic_dir = Path(Path(__file__).parent, "src/data/pics")
 
     if not pic_dir.exists():
         pic_dir.mkdir(exist_ok=True)
